@@ -2,7 +2,7 @@ import "@/styles/globals.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 import theme from "@/theme";
-import { ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
