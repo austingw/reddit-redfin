@@ -4,7 +4,64 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
+
+model Listing {
+  id        Int      @id @default(autoincrement())
+  soldDate DateTime? @map("sold_date")
+  propertyType String? @map("property_type")
+  address   String?
+  city      String?
+  state     String?
+  zip       String?
+  price     Float?
+  beds      Int?
+  baths     Int?
+  squareFeet Int? @map("square_feet") @default(0)
+  lotSize   Int? @map("lot_size")
+  yearBuilt Int? @map("year_built")
+  daysOnMarket Int? @map("days_on_market")
+  monthlyHoa Int? @map("monthly_hoa")
+  mlsNumber Int? @map("mls_number")
+  identifier String?
+  latitude Float?
+  longitude Float?
+  description String? @db.MediumText
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  comments  Comment[]
+  votes     Vote[]
+
+  @@map("listings")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  name      String
+  body      String   @db.MediumText
+  listingId Int      @map("listing_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  listing   Listing  @relation(fields: [listingId], references: [id])
+  votes     Vote[]
+  @@map("comments")
+}
+
+model Vote {
+  id        Int      @id @default(autoincrement())
+  isUpvote Boolean   @default(true) @map("is_upvote")
+  listingId Int?     @map("listing_id")
+  commentId Int?     @map("comment_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  listing   Listing?  @relation(fields: [listingId], references: [id])
+  comment  Comment? @relation(fields: [commentId], references: [id])
+  @@map("votes")
+}
+
