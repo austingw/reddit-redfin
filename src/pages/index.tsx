@@ -1,7 +1,18 @@
 import Head from "next/head";
-import { Box, Button, Input, Select, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Input,
+  Select,
+  Stack,
+  Table,
+  Typography,
+} from "@mui/material";
 import { SearchRounded } from "@mui/icons-material";
 import { useState } from "react";
+import useFindListings from "@/hooks/useFindListings";
+import ListingsTable from "@/components/ListingsTable";
 
 enum View {
   HOME = "home",
@@ -10,6 +21,16 @@ enum View {
 
 const Home = () => {
   const [view, setView] = useState<View>(View.HOME);
+
+  const { data, isLoading, error } = useFindListings({});
+
+  //Create an ID for the user in order to sync upvotes without an account system in place
+  let userId = localStorage.getItem("userId");
+  if (!userId) {
+    userId = crypto.randomUUID();
+    localStorage.setItem("userId", userId);
+  }
+
   // function success(position: any) {
   //   const latitude = position.coords.latitude;
   //   const longitude = position.coords.longitude;
@@ -36,6 +57,7 @@ const Home = () => {
         </Stack>
         <Input
           placeholder="Search"
+          startAdornment={<SearchRounded />}
           sx={{
             width: "50%",
             height: "50px",
@@ -66,12 +88,12 @@ const Home = () => {
           <Button variant="contained">Browse</Button>
           <Button variant="contained">Find Me</Button>
         </Stack>
-        {}
 
         <Typography variant="h2" color={"black"}>
           {view === View.HOME ? "Browse:" : "Results:"}
         </Typography>
 
+        {isLoading ? <CircularProgress /> : <ListingsTable listings={data} />}
         {/* Will use inside of search bar
       <Button
         onClick={() => navigator.geolocation.getCurrentPosition(success, error)}
