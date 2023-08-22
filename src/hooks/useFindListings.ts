@@ -11,8 +11,8 @@ interface Params {
 
 //GET a set of listings from the API
 export const findListings = async (data: Params) => {
-  axios
-    .get("/api/getListings", {
+  try {
+    const response = await axios.get("/api/getListings", {
       params: {
         page: data.page,
         limit: data.limit,
@@ -20,8 +20,11 @@ export const findListings = async (data: Params) => {
         order: data.order,
         searchTerm: data.searchTerm,
       },
-    })
-    .then((res) => res?.data);
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching listings:", error);
+  }
 };
 
 const useFindListings = (data: Params) => {
