@@ -24,7 +24,7 @@ const Home = () => {
 
   const { data, isLoading, error } = useFindListings({});
 
-  //Create an ID for the user in order to sync upvotes without an account system in place
+  //Create IDs in order to sync upvotes without an account system in place
   let userId = localStorage.getItem("userId");
   if (!userId) {
     userId = crypto.randomUUID();
