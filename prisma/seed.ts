@@ -39,12 +39,12 @@ async function main() {
   let batchedData: Row[] = [];
 
   // Process the batched data
-  const processBatch = async () => {
-    console.log(`Processing ${batchedData.length} listings...`);
-    if (batchedData.length > 0) {
+  const processBatch = async (batch: Row[]) => {
+    console.log(`Processing ${batch.length} listings...`);
+    if (batch.length > 0) {
       // Create the listings in the database
       await prisma.listing.createMany({
-        data: batchedData.map((listing) => {
+        data: batch.map((listing) => {
           return {
             soldDate: listing.sold_date,
             propertyType: listing.property_type,
@@ -100,14 +100,19 @@ async function main() {
           description: String(row.description),
         });
       }
-      if (batchedData.length >= batchSize) {
-        await processBatch().then(() => {
-          batchedData = [];
-        });
+      while (batchedData.length >= batchSize) {
+        const batchToProcess = batchedData.slice(0, batchSize);
+        await processBatch(batchToProcess);
+        batchedData = batchedData.slice(batchSize); // Remove processed batch from array
       }
     },
     complete: async () => {
-      await processBatch(); // Process any remaining data after the stream completes
+      // Process the remaining data
+      while (batchedData.length > 0) {
+        const batchToProcess = batchedData.slice(0, batchSize);
+        await processBatch(batchToProcess);
+        batchedData = batchedData.slice(batchSize); // Remove processed batch from array
+      }
       console.log("All listings are now in the database!");
     },
   });
