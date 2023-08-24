@@ -2,9 +2,18 @@ import useCreateComment from "@/hooks/useCreateComment";
 import useFindComments from "@/hooks/useFindComments";
 import { Comment, CommentData } from "@/types/comments";
 import { Listing } from "@/types/listings";
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import VotingButtons from "./VotingButtons";
+import parsePrice from "@/utils/parsePrice";
+import dayjs from "dayjs";
 
 interface ListingViewProps {
   listing: Listing;
@@ -43,29 +52,125 @@ const ListingView = ({ listing, userId }: ListingViewProps) => {
 
   return (
     <>
-      <Box
-        sx={{
-          position: "absolute" as "absolute",
-          display: "flex",
-          direction: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "80%",
-          height: "80%",
-          bgcolor: "white",
-          borderRadius: "20px",
-          lineHeight: "1",
-        }}
-      >
-        <Stack>
-          <VotingButtons listingId={listing.id} userId={userId} />
-          <Typography variant="h1" color={"black"}>
-            {listing.address}
+      <Box width={"100%"}>
+        <Stack
+          direction={"column"}
+          position={"relative"}
+          width={"100%"}
+          alignItems={"flex-start"}
+          justifyContent={"center"}
+          boxSizing={"border-box"}
+          gap={2}
+          p={2}
+          overflow={"scroll"}
+        >
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            gap={4}
+          >
+            <VotingButtons listingId={listing.id} userId={userId} />
+            <Typography variant="h5" fontWeight={600} color={"black"}>
+              {`${listing?.address}, ${listing?.city}, ${listing?.state} ${listing?.zip}`}
+            </Typography>
+          </Stack>
+          <Typography variant="body2" color={"black"}>
+            <b> Description: </b> {listing?.description}
           </Typography>
-          <Stack>
+          <Divider flexItem />
+
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            justifyContent={"flex-start"}
+            gap={2}
+          >
+            <Typography variant="body2" color={"black"}>
+              <b>Price:</b> {parsePrice(listing?.price)}
+            </Typography>
+            <Typography variant="body2" color={"black"}>
+              <b>Year Build:</b> {listing?.yearBuilt}{" "}
+            </Typography>
+
+            <Typography variant="body2" color={"black"}>
+              {" "}
+              <b>Days on Market:</b> {listing?.daysOnMarket}{" "}
+            </Typography>
+            <Typography variant="body2" color={"black"}>
+              <b>Sold Date: </b> {dayjs(listing?.soldDate).format("MM/DD/YYYY")}{" "}
+            </Typography>
+          </Stack>
+          <Divider flexItem />
+
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            justifyContent={"flex-start"}
+            gap={2}
+          >
+            <Typography variant="body2" color={"black"}>
+              <b> Property Type: </b>
+              {listing?.propertyType}
+            </Typography>
+            <Typography variant="body2" color={"black"}>
+              <b> Beds: </b> {listing?.beds}
+            </Typography>
+            <Typography variant="body2" color={"black"}>
+              <b> Baths: </b>
+              {listing?.baths}
+            </Typography>
+            <Typography variant="body2" color={"black"}>
+              <b> Size: </b>
+              {listing?.squareFeet > 0
+                ? listing?.squareFeet + " " + "Sq. Ft."
+                : "--"}
+            </Typography>
+            <Typography variant="body2" color={"black"}>
+              <b> Lot Size:</b> {listing?.lotSize}
+            </Typography>
+            <Typography variant="body2" color={"black"}>
+              <b> Monthly Hoa: </b>
+              {listing?.monthlyHoa}
+            </Typography>
+          </Stack>
+          <Divider flexItem />
+
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            justifyContent={"flex-start"}
+            gap={2}
+          >
+            <Typography variant="body2" color={"black"}>
+              <b> MLS Number:</b> {listing?.mlsNumber}
+            </Typography>
+            <Typography variant="body2" color={"black"}>
+              <b> Identifier:</b> {listing?.identifier}
+            </Typography>
+          </Stack>
+          <Divider flexItem />
+          <Typography variant="h6" color={"black"}>
+            Comments:
+          </Typography>
+          {!isLoading &&
+            data?.map((comment: Comment) => {
+              return (
+                <Stack
+                  key={comment?.id}
+                  direction={"row"}
+                  alignItems={"center"}
+                  justifyContent={"flex-start"}
+                  width={"100%"}
+                >
+                  <VotingButtons commentId={comment?.id} userId={userId} />
+                  <Typography variant="body2" color={"black"}>
+                    <b>{comment.name}:</b> {comment.body}
+                  </Typography>
+                </Stack>
+              );
+            })}
+          <Stack width={"100%"} gap={2}>
             <TextField
               id="name"
               label="name"
@@ -96,28 +201,6 @@ const ListingView = ({ listing, userId }: ListingViewProps) => {
               Submit
             </Button>
           </Stack>
-          <Typography variant="h2" color={"black"}>
-            Comments:
-          </Typography>
-          <Box
-            gap={2}
-            display={"flex"}
-            flexDirection={"column"}
-            alignItems={"flex-start"}
-            justifyContent={"center"}
-            height={"100px"}
-            overflow={"scroll"}
-          >
-            {!isLoading &&
-              data?.map((comment: Comment) => {
-                return (
-                  <Typography variant="body1" color={"black"} key={comment?.id}>
-                    <VotingButtons commentId={comment?.id} userId={userId} />
-                    {comment.body}
-                  </Typography>
-                );
-              })}
-          </Box>
         </Stack>
       </Box>
     </>
