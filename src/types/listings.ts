@@ -25,9 +25,12 @@ export type Listing = {
 };
 
 export type ListingParams = {
-  page?: number;
-  limit?: number;
-  sort?: string;
-  order?: string;
   searchTerm?: string;
+  page?: number;
+  rows?: number;
+  sort?: string;
+  price?: string;
+  type?: string;
+  beds?: number;
+  baths?: number;
 };
