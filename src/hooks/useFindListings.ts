@@ -1,16 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-
-interface Params {
-  page?: number;
-  limit?: number;
-  sort?: string;
-  order?: string;
-  searchTerm?: string;
-}
+import { ListingParams } from "@/types/listings";
 
 //GET a set of listings from the API
-export const findListings = async (data: Params) => {
+export const findListings = async (data: ListingParams) => {
   try {
     const response = await axios.get("/api/getListings", {
       params: {
@@ -27,7 +20,7 @@ export const findListings = async (data: Params) => {
   }
 };
 
-const useFindListings = (data: Params) => {
+const useFindListings = (data: ListingParams) => {
   return useQuery(["listings", data], () => findListings(data));
 };
 

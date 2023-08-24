@@ -1,3 +1,5 @@
+import { Vote } from "./votes";
+
 export type Listing = {
   id: number;
   soldDate: string;
@@ -19,8 +21,13 @@ export type Listing = {
   latitude: number;
   longitude: number;
   description: string;
-  votes: {
-    id: number;
-    isUpvote: boolean;
-  }[];
+  votes: Vote[];
+};
+
+export type ListingParams = {
+  page?: number;
+  limit?: number;
+  sort?: string;
+  order?: string;
+  searchTerm?: string;
 };
