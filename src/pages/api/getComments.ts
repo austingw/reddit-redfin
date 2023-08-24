@@ -8,27 +8,23 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log(req.query);
-
   const { listingId } = req.query;
 
-  const comments = await prisma.comment.findMany({
-    where: {
-      listingId: Number(listingId),
-    },
-    select: {
-      id: true,
-      body: true,
-      name: true,
-      votes: {
+  try {
+    const comments =
+      (await prisma.comment.findMany({
+        where: {
+          listingId: Number(listingId),
+        },
         select: {
           id: true,
-          isUpvote: true,
-          commentId: true,
+          body: true,
+          name: true,
         },
-      },
-    },
-  });
+      })) || [];
 
-  res.status(200).json({ data: comments });
+    res.status(200).json({ data: comments });
+  } catch {
+    res.status(500).json({ message: "Error getting comments" });
+  }
 }
