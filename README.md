@@ -1,10 +1,14 @@
 # Red(it)fin
 
+## What I used
+
+Typescript, Next.js, Prisma, Material UI, MySQL, Tanstack Query, and Axios
+
 ## Instructions
 
 1. Install Docker/Docker Desktop
 
-2. Open a terminal in the project directory
+2. Open terminal in the project directory
 
 3. Run the following command to build and run the app:
 
@@ -24,7 +28,6 @@ to run all Prisma migrations
 
 ```
 docker compose exec db bash
-
 ```
 
 into your terminal
@@ -33,7 +36,6 @@ into your terminal
 
 ```
 mysql -u root -p
-
 ```
 
 ```
