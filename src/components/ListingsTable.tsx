@@ -1,15 +1,14 @@
 import { Listing } from "@/types/listings";
 import {
   Box,
-  Modal,
-  Stack,
+  Dialog,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TablePagination,
   TableRow,
+  Typography,
   useTheme,
 } from "@mui/material";
 import dayjs from "dayjs";
@@ -22,12 +21,23 @@ interface ListingsTableProps {
   listings: Listing[];
   userId: string;
   total: number;
+  rows: number;
+  setRows: (rows: number) => void;
+  page: number;
+  setPage: (page: number) => void;
 }
 
-const ListingsTable = ({ listings, userId, total }: ListingsTableProps) => {
+const ListingsTable = ({
+  listings,
+  userId,
+  total,
+  rows,
+  setRows,
+  page,
+  setPage,
+}: ListingsTableProps) => {
   const [open, setOpen] = useState(false);
-  const [rows, setRows] = useState(10);
-  const [page, setPage] = useState(0);
+
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
 
   const theme = useTheme();
@@ -78,8 +88,10 @@ const ListingsTable = ({ listings, userId, total }: ListingsTableProps) => {
         display={"flex"}
         alignItems={"center"}
         justifyContent={"center"}
+        minHeight={"100vh"}
         borderTop={`1px solid ${theme.palette.divider}`}
       >
+        (
         <TableContainer>
           <Table>
             <TableBody>
@@ -98,13 +110,16 @@ const ListingsTable = ({ listings, userId, total }: ListingsTableProps) => {
                     </TableCell>
                     <TableCell
                       onClick={() => handleRowClick(listing)}
-                    >{`${listing?.address} ${listing?.city} ${listing?.state} ${listing?.zip}`}</TableCell>
+                    >{`${listing?.address}, ${listing?.city}, ${listing?.state} ${listing?.zip}`}</TableCell>
                     <TableCell onClick={() => handleRowClick(listing)}>
                       {parsePrice(listing?.price)}
                     </TableCell>
                     <TableCell
                       onClick={() => handleRowClick(listing)}
-                    >{`${listing?.beds}/${listing?.baths}`}</TableCell>
+                    >{`${listing?.beds} Beds`}</TableCell>
+                    <TableCell
+                      onClick={() => handleRowClick(listing)}
+                    >{`${listing?.baths} Baths`}</TableCell>
                     <TableCell onClick={() => handleRowClick(listing)}>
                       {listing?.squareFeet > 0
                         ? listing?.squareFeet + " " + "Sq. Ft."
@@ -133,18 +148,14 @@ const ListingsTable = ({ listings, userId, total }: ListingsTableProps) => {
             />
           </Table>
         </TableContainer>
-        <Modal
-          open={open}
-          onClose={() => setOpen(false)}
-          aria-labelledby="parent-modal-title"
-          aria-describedby="parent-modal-description"
-        >
+        )
+        <Dialog open={open} onClose={() => setOpen(false)}>
           <>
             {selectedListing && (
               <ListingView listing={selectedListing} userId={userId} />
             )}
           </>
-        </Modal>
+        </Dialog>
       </Box>
     </>
   );
