@@ -256,14 +256,20 @@ const Home = () => {
         </Stack>
 
         {isLoading || isRefetching ? (
-          <Box width={"100vw"} height={"100vh"}>
+          <Box
+            width={"100vw"}
+            height={"100vh"}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+          >
             <CircularProgress
               sx={{
                 color: "primary.main",
                 position: "absolute",
                 top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
+                left: "47.5%",
+                transform: "translate(-50%, -40%)",
               }}
             />
           </Box>
