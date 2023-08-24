@@ -8,40 +8,17 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  //gets listings from db based on filters
   const listings = await prisma.listing.findMany({
-    select: {
-      id: true,
-      soldDate: true,
-      propertyType: true,
-      address: true,
-      city: true,
-      state: true,
-      zip: true,
-      price: true,
-      beds: true,
-      baths: true,
-      squareFeet: true,
-      lotSize: true,
-      yearBuilt: true,
-      daysOnMarket: true,
-      monthlyHoa: true,
-      mlsNumber: true,
-      latitude: true,
-      longitude: true,
-      description: true,
-      votes: {
-        select: {
-          id: true,
-          isUpvote: true,
-        },
-      },
-    },
     skip: 0,
-    take: 100,
+    take: 10,
     orderBy: {
       soldDate: "desc",
     },
   });
 
-  res.status(200).json({ data: listings });
+  //gets total number of listings from db based on filters
+  const total = await prisma.listing.count();
+
+  res.status(200).json({ data: { listings, total } });
 }
