@@ -5,25 +5,22 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        - DATABASE_URL=mysql://prisma:prisma@db:3306/prisma/mydb?connection_limit=5&pool_timeout=0
     ports:
       - "3000:3000"
     depends_on:
       - db
     environment:
-      DATABASE_URL: mysql://prisma:prisma@db:3306/prisma/mydb?connection_limit=5&pool_timeout=0
+      DATABASE_URL: mysql://root:Password123!@db:3306/mydb?connection_limit=10&pool_timeout=0
 
   db:
     image: mysql:8.0
+    command: --secure-file-priv=''
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_USER: prisma
-      MYSQL_PASSWORD: prisma
-      MYSQL_DATABASE: prisma
-    command: --default-authentication-plugin=mysql_native_password
+      MYSQL_ROOT_PASSWORD: Password123!
+      MYSQL_DATABASE: mydb
     volumes:
+      - ./prisma:/docker-entrypoint-initdb.d
       - db-data:/var/lib/mysql
     ports:
       - "3306:3306"
