@@ -98,7 +98,6 @@ const VotingButtons = ({
         listingId: userVote?.listingId,
       })
       .then(() => {
-        //setVoteStyle(userVote?.isUpvote ? "down" : "up");
         refetch();
       });
   };
@@ -115,11 +114,11 @@ const VotingButtons = ({
         }
       >
         <ArrowUpwardOutlined
-          fontSize="medium"
+          fontSize="small"
           htmlColor={voteStyle === "up" ? "orange" : "gray"}
         />
       </IconButton>
-      <Typography variant={"body1"} color={"black"}>
+      <Typography variant={"body2"} color={"gray"}>
         {total}
       </Typography>
       <IconButton
@@ -132,7 +131,7 @@ const VotingButtons = ({
         }
       >
         <ArrowDownwardOutlined
-          fontSize="medium"
+          fontSize="small"
           htmlColor={voteStyle === "down" ? "blue" : "gray"}
         />
       </IconButton>
