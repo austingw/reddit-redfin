@@ -2,9 +2,9 @@ const parseSearchTerm = (searchTerm: string) => {
   let whereVal = {};
 
   //if search term has more than one word, assume it's a city, state pair
-  if (searchTerm.split(" ").length > 1) {
-    const city = searchTerm.split(" ")[0];
-    const state = searchTerm.split(" ")[1];
+  if (searchTerm.split(",").length > 1) {
+    const city = searchTerm.split(",")[0].trim();
+    const state = searchTerm.split(",")[1].trim();
     whereVal = {
       AND: [
         {
@@ -44,3 +44,5 @@ const parseSearchTerm = (searchTerm: string) => {
     return whereVal;
   }
 };
+
+export default parseSearchTerm;
