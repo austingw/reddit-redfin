@@ -124,7 +124,7 @@ const Home = () => {
         </Stack>
 
         <Stack
-          px={8}
+          px={4}
           py={2}
           flexDirection={"row"}
           alignItems={"center"}

@@ -149,7 +149,12 @@ const ListingsTable = ({
           </Table>
         </TableContainer>
         )
-        <Dialog open={open} onClose={() => setOpen(false)}>
+        <Dialog
+          open={open}
+          onClose={() => setOpen(false)}
+          fullWidth
+          maxWidth="md"
+        >
           <>
             {selectedListing && (
               <ListingView listing={selectedListing} userId={userId} />

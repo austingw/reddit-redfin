@@ -71,7 +71,8 @@ const ListingView = ({ listing, userId }: ListingViewProps) => {
             gap={4}
           >
             <VotingButtons listingId={listing.id} userId={userId} />
-            <Typography variant="h5" fontWeight={600} color={"black"}>
+            <Typography variant="h5" color={"black"}>
+              <b>Address:</b>{" "}
               {`${listing?.address}, ${listing?.city}, ${listing?.state} ${listing?.zip}`}
             </Typography>
           </Stack>
