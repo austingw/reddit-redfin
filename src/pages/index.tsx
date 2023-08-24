@@ -4,6 +4,7 @@ import {
   Button,
   CircularProgress,
   Input,
+  MenuItem,
   Select,
   Stack,
   Table,
@@ -22,9 +23,35 @@ enum View {
 
 const Home = () => {
   const [view, setView] = useState<View>(View.HOME);
-  const { data, isLoading, error } = useFindListings({});
+
+  const [rows, setRows] = useState(10);
+  const [page, setPage] = useState(0);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [sort, setSort] = useState<string>("New");
+  const [price, setPrice] = useState<string>("All");
+  const [type, setType] = useState<string>("All");
+  const [beds, setBeds] = useState<number>(0);
+  const [baths, setBaths] = useState<number>(0);
+
+  const { data, isLoading, isRefetching, refetch, error } = useFindListings({
+    searchTerm,
+    sort,
+    price,
+    type,
+    beds,
+    baths,
+    rows,
+    page,
+  });
 
   const theme = useTheme();
+
+  //get user location and override search term
+  function success(position: GeolocationPosition) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    setSearchTerm(`coords:${latitude},${longitude}`);
+  }
 
   //was going to use uuid in local storage, but ran into some Next issues
   let userId = "qwe123";
@@ -41,35 +68,43 @@ const Home = () => {
         <Stack
           py={4}
           direction={"row"}
-          justifyContent={"space-evenly"}
+          justifyContent={"space-between"}
           alignItems={"center"}
           height={"100px"}
           top={0}
-          px={8}
+          px={4}
           bgcolor={"primary.main"}
         >
-          <Typography variant="h3" color={"black"}>
+          <Typography variant="h3" color={"white"}>
             Red(it)fin
           </Typography>
           <Stack gap={2} direction={"row"} minWidth={"600px"}>
             <Input
               placeholder="City, State, or Zip"
+              color="secondary"
+              onBlur={(e) => setSearchTerm(e.target.value)}
               sx={{
-                color: "white",
+                color: "secondary.main",
                 width: "500px",
                 height: "50px",
                 fontSize: "20px",
-                borderRadius: "10px",
-                borderColor: "white",
+                "&:before, &:after": {
+                  borderBottom: "2px solid secondary.main",
+                },
+                "& .MuiInput-underline:hover": {
+                  borderBottom: "2px solid secondary.main",
+                },
               }}
             />
             <Button
               variant="contained"
               color="secondary"
               sx={{
+                color: "primary.main",
                 width: "120px",
                 height: "50px",
               }}
+              onClick={() => refetch()}
             >
               <Search /> Search
             </Button>
@@ -81,6 +116,7 @@ const Home = () => {
                 height: "50px",
                 px: 0,
               }}
+              onClick={() => navigator.geolocation.getCurrentPosition(success)}
             >
               <NearMe /> Find Me
             </Button>
@@ -94,53 +130,138 @@ const Home = () => {
           alignItems={"center"}
           justifyContent={"space-between"}
         >
-          <Stack direction={"row"} alignItems={"center"} gap={2}>
-            <Typography variant="h6" fontWeight={600} color={"black"}>
-              Sort:
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            justifyContent={"flex-start"}
+            gap={1}
+          >
+            <Typography variant="body1" color={"primary.main"}>
+              Sort by:
             </Typography>
-
             <Select
               variant="standard"
-              size="small"
-              defaultValue="All"
-              name=""
+              color="primary"
+              disableUnderline
+              size="medium"
+              defaultValue={"New"}
+              name="sort"
+              autoWidth
+              onChange={(e) => setSort(e.target.value)}
               sx={{
-                width: "160px",
+                color: "primary.main",
+                mt: 0,
               }}
-            />
+            >
+              <MenuItem value={"New"}>New</MenuItem>
+              <MenuItem value={"Old"}>Old</MenuItem>
+              <MenuItem value={"Most"}>Most Votes</MenuItem>
+              <MenuItem value={"Least"}>Least Votes</MenuItem>
+              <MenuItem value={"Hiprice"}>Highest Price</MenuItem>
+              <MenuItem value={"Loprice"}>Lowest Price</MenuItem>
+            </Select>
           </Stack>
           <Stack flexDirection={"row"} gap={2}>
             <Select
               variant="outlined"
               size="small"
-              placeholder="Price"
-              defaultValue="All"
-            />
+              color="primary"
+              disableUnderline
+              defaultValue={"All"}
+              name="price"
+              autoWidth
+              onChange={(e) => setPrice(e.target.value)}
+              sx={{
+                color: "primary.main",
+                mt: 0,
+              }}
+            >
+              <MenuItem value={"All"}>Price</MenuItem>
+              <MenuItem value={"0-100000"}>$0 - $100,000</MenuItem>
+              <MenuItem value={"100001-250000"}>$100,001 - $250,000</MenuItem>
+              <MenuItem value={"250001-500000"}>$250,001 - $500,000</MenuItem>
+              <MenuItem value={"500001-750000"}>$500,001 - $750,000</MenuItem>
+              <MenuItem value={"750000-1000000"}>
+                $750,000 - $1,000,000
+              </MenuItem>
+              <MenuItem value={"1000000-99999999999"}>$1,000,001+</MenuItem>
+            </Select>
             <Select
               variant="outlined"
               size="small"
-              placeholder="Home Type"
-              defaultValue="All"
-            />
+              color="primary"
+              disableUnderline
+              defaultValue={"All"}
+              name="type"
+              autoWidth
+              onChange={(e) => setType(e.target.value)}
+              sx={{
+                color: "primary.main",
+                mt: 0,
+              }}
+            >
+              <MenuItem value={"All"}>Type</MenuItem>
+              <MenuItem value={"Condo"}>Condo</MenuItem>
+              <MenuItem value={"Land"}>Land</MenuItem>
+              <MenuItem value={"Multi Family"}>Multi-Family</MenuItem>
+              <MenuItem value={"Single Family"}>Single-Family</MenuItem>
+              <MenuItem value={"Townhouse"}>Townhouse</MenuItem>
+            </Select>
+
             <Select
               variant="outlined"
               size="small"
-              placeholder="Beds"
-              defaultValue="All"
-            />
+              color="primary"
+              disableUnderline
+              defaultValue={0}
+              name="beds"
+              autoWidth
+              onChange={(e) => setBeds(Number(e.target.value))}
+              sx={{
+                color: "primary.main",
+                mt: 0,
+              }}
+            >
+              <MenuItem value={0}>Beds</MenuItem>
+              <MenuItem value={1}>1 Bed</MenuItem>
+              <MenuItem value={2}>2 Beds</MenuItem>
+              <MenuItem value={3}>3 Beds</MenuItem>
+              <MenuItem value={4}>4 Beds</MenuItem>
+              <MenuItem value={5}>5 Beds</MenuItem>
+              <MenuItem value={6}>6 Beds</MenuItem>
+              <MenuItem value={6}>7+ Beds</MenuItem>
+            </Select>
             <Select
               variant="outlined"
               size="small"
-              placeholder="Baths"
-              defaultValue="All"
-            />
+              color="primary"
+              disableUnderline
+              defaultValue={0}
+              name="beds"
+              autoWidth
+              onChange={(e) => setBaths(Number(e.target.value))}
+              sx={{
+                color: "primary.main",
+                mt: 0,
+              }}
+            >
+              <MenuItem value={0}>Baths</MenuItem>
+              <MenuItem value={1}>1 Bath</MenuItem>
+              <MenuItem value={2}>2 Baths</MenuItem>
+              <MenuItem value={3}>3 Baths</MenuItem>
+              <MenuItem value={4}>4 Baths</MenuItem>
+              <MenuItem value={5}>5 Baths</MenuItem>
+              <MenuItem value={6}>6 Baths</MenuItem>
+              <MenuItem value={6}>7+ Baths</MenuItem>
+            </Select>
           </Stack>
         </Stack>
 
-        {isLoading ? (
+        {isLoading || isRefetching ? (
           <Box width={"100vw"} height={"100vh"}>
             <CircularProgress
               sx={{
+                color: "primary.main",
                 position: "absolute",
                 top: "50%",
                 left: "50%",
@@ -153,14 +274,12 @@ const Home = () => {
             listings={data?.listings}
             total={data?.total}
             userId={userId}
+            rows={rows}
+            setRows={setRows}
+            page={page}
+            setPage={setPage}
           />
         )}
-        {/* Will use inside of search bar
-      <Button
-        onClick={() => navigator.geolocation.getCurrentPosition(success, error)}
-      >
-        Current Location
-      </Button> */}
       </Box>
     </>
   );
