@@ -8,7 +8,6 @@ import {
   Select,
   Stack,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { NearMe, Search } from "@mui/icons-material";
 import { useState } from "react";
@@ -78,7 +77,7 @@ const Home = () => {
           </Typography>
           <Stack gap={2} direction={"row"} minWidth={"600px"}>
             <Input
-              placeholder="City, State, or Zip"
+              placeholder="Address, City, State, or Zip"
               color="secondary"
               onBlur={(e) => setSearchTerm(e.target.value)}
               sx={{

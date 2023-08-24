@@ -25,6 +25,11 @@ const parseSearchTerm = (searchTerm: string) => {
     whereVal = {
       OR: [
         {
+          address: {
+            contains: searchTerm,
+          },
+        },
+        {
           city: {
             contains: searchTerm,
           },
