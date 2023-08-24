@@ -118,7 +118,7 @@ const VotingButtons = ({
         />
       </IconButton>
       <Typography variant={"body2"} color={"gray"}>
-        {total}
+        {total ? total : 0}
       </Typography>
       <IconButton
         onClick={
