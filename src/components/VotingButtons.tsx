@@ -8,7 +8,6 @@ import {
   ArrowUpwardOutlined,
 } from "@mui/icons-material";
 import { Button, IconButton, Stack, Typography } from "@mui/material";
-import { create } from "domain";
 import { useEffect, useState } from "react";
 
 interface VotingButtonsProps {

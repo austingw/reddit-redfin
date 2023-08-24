@@ -7,8 +7,7 @@ export default async function handler(
 ) {
   const { id } = req.body;
 
-  console.log("is this getting hit?", id, req.body);
-
+  //Delete a vote based on id
   try {
     await prisma.vote.delete({
       where: {

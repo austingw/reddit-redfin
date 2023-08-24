@@ -7,8 +7,7 @@ export default async function handler(
 ) {
   const { isUpvote, listingId, commentId, userId } = req.body;
 
-  console.log(req.body);
-
+  //Create a vote for a given listing or comment based on whatever value is there
   try {
     await prisma.vote.create({
       data: {

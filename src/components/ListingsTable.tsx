@@ -8,7 +8,6 @@ import {
   TableContainer,
   TablePagination,
   TableRow,
-  Typography,
   useTheme,
 } from "@mui/material";
 import dayjs from "dayjs";
@@ -41,30 +40,6 @@ const ListingsTable = ({
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
 
   const theme = useTheme();
-
-  const columnHeaders = [
-    { field: "voteButtons", headerName: "Votes" },
-    {
-      field: "fullAddress",
-      headerName: "Address",
-    },
-    {
-      field: "price",
-      headerName: "Price",
-    },
-    {
-      field: "bedsBaths",
-      headerName: "Beds/Baths",
-    },
-    {
-      field: "sqft",
-      headerName: "Sqft",
-    },
-    {
-      field: "soldDate",
-      headerName: "Sold Date",
-    },
-  ];
 
   const handleRowClick = (listing: Listing) => {
     setSelectedListing(listing);

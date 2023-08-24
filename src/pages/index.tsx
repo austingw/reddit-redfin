@@ -7,12 +7,11 @@ import {
   MenuItem,
   Select,
   Stack,
-  Table,
   Typography,
   useTheme,
 } from "@mui/material";
-import { NearMe, Search, SearchRounded } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { NearMe, Search } from "@mui/icons-material";
+import { useState } from "react";
 import useFindListings from "@/hooks/useFindListings";
 import ListingsTable from "@/components/ListingsTable";
 
@@ -44,8 +43,6 @@ const Home = () => {
     page,
   });
 
-  const theme = useTheme();
-
   //get user location and override search term
   function success(position: GeolocationPosition) {
     const latitude = position.coords.latitude;
@@ -53,8 +50,9 @@ const Home = () => {
     setSearchTerm(`coords:${latitude},${longitude}`);
   }
 
-  //was going to use uuid in local storage, but ran into some Next issues
-  let userId = "qwe123";
+  //placeholder for user id, could be replaced with auth/cookie/token
+  //for now, just hardcoding it in order to show full Reddit-style vote styling/behavior
+  let userId = "1";
 
   return (
     <>

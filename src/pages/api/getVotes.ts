@@ -10,8 +10,7 @@ export default async function handler(
 ) {
   const { type, id } = req.query;
 
-  console.log("listingId", type, "commentId", id);
-
+  //Get votes based on whether it's a listing or comment
   if (type === "listing") {
     const votes =
       (await prisma.vote.findMany({

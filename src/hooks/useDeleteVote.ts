@@ -1,4 +1,3 @@
-import { queryClient } from "@/pages/_app";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -8,6 +7,7 @@ interface DeleteVoteQuery {
   commentId?: number;
 }
 
+//DEKETE a vote from the API
 export const deleteVote = async (data: DeleteVoteQuery) => {
   try {
     const response = await axios.delete(`/api/deleteVotes`, {

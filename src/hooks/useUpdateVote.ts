@@ -9,6 +9,7 @@ interface UpdateVoteQuery {
   commentId?: number;
 }
 
+//PUT a vote to the API to update it's value
 export const updateVote = async (data: UpdateVoteQuery) => {
   try {
     const response = await axios.put(`/api/updateVotes`, data);

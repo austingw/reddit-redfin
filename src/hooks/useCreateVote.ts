@@ -3,6 +3,7 @@ import { VoteData } from "@/types/votes";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
+//POST a vote to the API
 export const createVote = async (data: VoteData) => {
   try {
     const response = await axios.post("/api/createVotes", data);

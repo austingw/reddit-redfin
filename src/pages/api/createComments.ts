@@ -7,8 +7,7 @@ export default async function handler(
 ) {
   const { body, listingId, name } = req.body;
 
-  console.log(req.body);
-
+  //Create a comment for a given listing
   try {
     await prisma.comment.create({
       data: {

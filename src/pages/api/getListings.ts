@@ -124,6 +124,10 @@ export default async function handler(
       },
       ...bedsVal,
       ...bathsVal,
+      price: {
+        gte: splitPrice ? Number(splitPrice[0]) : 0,
+        lte: splitPrice ? Number(splitPrice[1]) : 999999999,
+      },
     },
     orderBy: {
       ...sortVal,

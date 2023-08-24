@@ -7,6 +7,7 @@ export default async function handler(
 ) {
   const { isUpvote, id } = req.body;
 
+  //Update a vote based on id by toggling its boolean value for isUpvote
   try {
     await prisma.vote.update({
       where: {

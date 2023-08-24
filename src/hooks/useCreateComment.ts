@@ -1,8 +1,8 @@
-import { queryClient } from "@/pages/_app";
 import { CommentData } from "@/types/comments";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
+//POST a comment to the API
 export const createComment = async (data: CommentData) => {
   try {
     const response = await axios.post("/api/createComments", data);

@@ -21,7 +21,6 @@ interface ListingViewProps {
 }
 
 const ListingView = ({ listing, userId }: ListingViewProps) => {
-  const [submitted, setSubmitted] = useState(false);
   const [username, setUsername] = useState("");
   const [body, setBody] = useState("");
 
@@ -43,9 +42,6 @@ const ListingView = ({ listing, userId }: ListingViewProps) => {
         listingId: listing.id,
       })
       .then(() => {
-        setSubmitted(true);
-        refetch();
-        setTimeout(() => setSubmitted(false), 3000);
         refetch();
       });
   };
