@@ -28,6 +28,9 @@ interface Row {
   description: string | null;
 }
 
+//I really enjoyed making a seed script in order to quickly test schema changes and re-seed the db,
+//Unfortunately it doesn't work in Docker. I'm leaving it here for reference,
+//Please use the instructions in the README
 async function main() {
   // Define absolute path to csv file
   const path = require("path");
@@ -35,7 +38,8 @@ async function main() {
   // Read and process it in chunks
   const readStream = fs.createReadStream(csvFilePath, "utf8");
 
-  const batchSize = 10000;
+  // Unfortunately, adjusting the batch size to 100 still wouldn't work in Docker...
+  const batchSize = 100000;
   let batchedData: Row[] = [];
 
   // Process the batched data
