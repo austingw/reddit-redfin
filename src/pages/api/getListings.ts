@@ -125,8 +125,11 @@ export default async function handler(
       ...bedsVal,
       ...bathsVal,
       price: {
-        gte: splitPrice ? Number(splitPrice[0]) : 0,
-        lte: splitPrice ? Number(splitPrice[1]) : 999999999,
+        gte: String(splitPrice?.[0]) != "All" ? Number(splitPrice?.[0]) : 0,
+        lte:
+          String(splitPrice?.[0]) != "All"
+            ? Number(splitPrice?.[1])
+            : 999999999,
       },
     },
     orderBy: {
@@ -143,6 +146,13 @@ export default async function handler(
       },
       ...bedsVal,
       ...bathsVal,
+      price: {
+        gte: String(splitPrice?.[0]) != "All" ? Number(splitPrice?.[0]) : 0,
+        lte:
+          String(splitPrice?.[0]) != "All"
+            ? Number(splitPrice?.[1])
+            : 999999999,
+      },
     },
   });
 
