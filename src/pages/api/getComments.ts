@@ -10,6 +10,7 @@ export default async function handler(
 ) {
   const { listingId } = req.query;
 
+  //Get comments for a given listing and always sort by newest
   try {
     const comments =
       (await prisma.comment.findMany({
@@ -20,6 +21,9 @@ export default async function handler(
           id: true,
           body: true,
           name: true,
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       })) || [];
 
