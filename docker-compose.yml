@@ -5,12 +5,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - DATABASE_URL=mysql://prisma:prisma@db:3306/prisma/mydb?connection_limit=5&pool_timeout=0
     ports:
       - "3000:3000"
     depends_on:
       - db
     environment:
-      DATABASE_URL: mysql://prisma:prisma@db:3306/prisma
+      DATABASE_URL: mysql://prisma:prisma@db:3306/prisma/mydb?connection_limit=5&pool_timeout=0
 
   db:
     image: mysql:8.0

@@ -8,8 +8,12 @@ RUN npm install -g pnpm
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
-# Copy pnpm's lock files for better caching of node modules
-COPY pnpm-lock.yaml ./
+# Set environment variable for DATABASE_URL
+ARG DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
+
+# Copy pnpm's lock files and package.json for better caching of node modules
+COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies using pnpm
 RUN pnpm install --frozen-lockfile
