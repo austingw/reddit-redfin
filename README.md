@@ -24,45 +24,14 @@ docker compose exec web npx prisma migrate deploy
 
 to run all Prisma migrations
 
-5. Next, ssh into the MySQL container by typing
+5. Finally, seed the database with rows from the .csv using:
 
 ```
-docker compose exec db bash
+docker compose exec web npx prisma db seed
 ```
 
-into your terminal
+This may take a while, as I had to drastically change the seed file for Docker. Locally, I was able to do some batching to speedily seed the database, but I kept running into connection issues when trying to seed in the container. :/Please feel free to make some coffee or go for a walk during the process
 
-6. Now log into the MySQL CLI:
-
-```
-mysql -u root -p
-```
-
-```
-Password123!
-```
-
-7. Finally we import the .csv into the database:
-
-```
-USE mydb
-```
-
-and run the following:
-
-```
-LOAD DATA INFILE '/docker-entrypoint-initdb.d/data.csv'
-INTO TABLE listings
-FIELDS TERMINATED BY ','
-ENCLOSED BY '"'
-LINES TERMINATED BY '\n'
-IGNORE 1 ROWS
-(sold_date, property_type, address, city, state, zip, price, beds, baths, @square_feet, lot_size, year_built, days_on_market, monthly_hoa, mls_number, identifier, latitude, longitude, @description)
-SET
-    square_feet = IF(@square_feet = '', 0, @square_feet),
-    description = LEFT(@description, 65535);
-```
-
-DONE! The app is now available on http://localhost:3000/
+Once you see "🌱 The seed command has been executed." you can enjoy the app at http://localhost:3000/
 
 Have fun!
